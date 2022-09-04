@@ -1,0 +1,9 @@
+package com.hms.usersystem;
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableWebSecurity
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
+
+}

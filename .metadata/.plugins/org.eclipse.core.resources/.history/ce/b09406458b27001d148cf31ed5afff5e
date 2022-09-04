@@ -1,0 +1,28 @@
+package com.hms.inventorymanagement;
+
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
+@RunWith(MockitoJUnitRunner.class)
+public class InventoryControllerTest {
+
+	
+	private MockMvc mockMvc;
+	
+	ObjectMapper objectMapper = new ObjectMapper();
+	ObjectWriter objectWriter = new ObjectMapper.writer();
+	
+	
+	
+	@Test
+	void getData() {
+		
+	}
+	
+	
+}

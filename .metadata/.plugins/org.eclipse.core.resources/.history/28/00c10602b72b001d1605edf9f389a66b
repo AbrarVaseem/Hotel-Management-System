@@ -1,0 +1,76 @@
+package com.hms.usersystem.models;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="rooms")
+
+public class Room {
+	
+	@Id
+	private String id;
+	private String roomCount;
+	private String roomInfo;
+	private String roomRate;
+	private String status;
+	
+	public Room() {
+		super();
+	}
+
+	public Room(String id, String roomCount, String roomInfo, String roomRate, String status) {
+		super();
+		this.id = id;
+		this.roomCount = roomCount;
+		this.roomInfo = roomInfo;
+		this.roomRate = roomRate;
+		this.status = status;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getRoomCount() {
+		return roomCount;
+	}
+
+	public void setRoomCount(String roomCount) {
+		this.roomCount = roomCount;
+	}
+
+	public String getRoomInfo() {
+		return roomInfo;
+	}
+
+	public void setRoomInfo(String roomInfo) {
+		this.roomInfo = roomInfo;
+	}
+
+	public String getRoomRate() {
+		return roomRate;
+	}
+
+	public void setRoomRate(String roomRate) {
+		this.roomRate = roomRate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,28 @@
+package com.hms.inventorymanagement;
+
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+@RunWith(MockitoJUnitRunner.class)
+public class InventoryTest {
+
+    @Mock
+    private InventoryRepository userRepository;
+
+    @InjectMocks
+    private InventoryService listUserService;
+
+    @Test
+    public void shouldReturnAllUsers() {
+        List<User> users = new ArrayList();
+        users.add(new User());
+
+        given(userRepository.findAll()).willReturn(users);
+
+        List<User> expected = listUserService.listAllUsers();
+
+        assertEquals(expected, users);
+        verify(userRepository).findAll();
+    }
+}

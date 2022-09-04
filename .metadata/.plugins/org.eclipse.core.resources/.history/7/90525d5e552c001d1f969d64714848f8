@@ -1,0 +1,12 @@
+package com.hms.usersystem;
+
+import org.springframework.stereotype.Repository;
+
+import com.hms.usersystem.models.Manager;
+
+@Repository
+public class UserRepository extends MongoRepository<User, Long>{
+
+    User findByUsername(String username);
+
+}

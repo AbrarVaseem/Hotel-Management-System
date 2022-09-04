@@ -1,0 +1,4 @@
+server.port=8083
+spring.data.mongodb.uri=mongodb+srv://AbrarVaseem:#Abdevilliers17@cluster0.vscdm4a.mongodb.net/hms-inventory-management?retryWrites=true&w=majority
+spring.application.name=inventory-management
+spring.data.mongodb.auto-index-creation=true

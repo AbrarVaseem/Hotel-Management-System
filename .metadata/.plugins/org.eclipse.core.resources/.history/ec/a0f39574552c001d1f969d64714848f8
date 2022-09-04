@@ -1,0 +1,5 @@
+package com.hms.usersystem;
+
+public interface UserRepository {
+
+}

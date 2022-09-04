@@ -1,0 +1,59 @@
+package com.hms.inventorymanagement;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.Before;
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.hms.inventorymanagement.models.Inventory;
+import com.hms.inventorymanagement.repositories.InventoryRepository;
+import com.hms.inventorymanagement.resources.InventoryController;
+
+@RunWith(MockitoJUnitRunner.class)
+public class InventoryControllerTest {
+ 
+	private MockMvc mockMvc;
+	
+	ObjectMapper objectMapper = new ObjectMapper();
+	ObjectWriter objectWriter =  objectMapper.writer();
+	
+	@Mock
+	private InventoryRepository inventoryRepository;
+	@InjectMocks
+	private InventoryController inventoryController;
+	
+	Inventory entry_1 = new Inventory("1","soap",600);
+	Inventory entry_2 = new Inventory("2","cell",605);
+	Inventory entry_3 = new Inventory("3","cleaner",560);
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+		this.mockMvc = MockMvcBuilders.standaloneSetup(inventoryController).build();	
+		}
+	
+	@Test
+	public void getAllEntries_success() throws Exception {
+		List<Inventory> Entries = new ArrayList<>(Arrays.asList(entry_1,entry_2,entry_3));
+		Mockito.when(inventoryRepository.findAll()).thenReturn(Entries);
+		mockMvc.perform(MockMvcRequestBuilders.get("/inventory").contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().ok())
+		.andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(3)))
+		.andExpect(jsonPath("$[2].inventoryItemName", is("Mob")));
+	}
+}

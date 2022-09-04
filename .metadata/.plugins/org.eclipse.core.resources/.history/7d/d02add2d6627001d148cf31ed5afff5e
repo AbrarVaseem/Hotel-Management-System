@@ -1,0 +1,4 @@
+server.port=8083
+spring.data.mongodb.uri=mongodb://localhost:27017/hotel-management-system
+spring.application.name=inventory-management
+spring.data.mongodb.auto-index-creation=true

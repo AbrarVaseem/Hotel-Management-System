@@ -1,0 +1,89 @@
+package com.hms.owner.resources;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import com.hms.owner.models.Guest;
+import com.hms.owner.models.Inventory;
+import com.hms.owner.models.Manager;
+import com.hms.owner.models.Owner;
+import com.hms.owner.models.Reservation;
+import com.hms.owner.models.Room;
+import com.hms.owner.services.ManagerService;
+import com.hms.owner.services.OwnerService;
+
+@RestController
+@RequestMapping("api")
+public class OwnerController {
+	
+	
+	@Autowired
+	private RestTemplate restTemplate;
+		
+	@Autowired
+	private OwnerService ownerService;
+	
+	@Autowired
+	private ManagerService managerService;
+	
+	
+	@RequestMapping(method=RequestMethod.POST, value="/add-owner")
+	public void addOwner(@RequestBody Owner owner){
+		ownerService.addOwner(owner);
+	}
+	
+	@GetMapping("/owners")
+	public List<Owner> getAllOwner() {
+		return ownerService.getAllOwners();
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value="/add-manager")
+	public void addManager(@RequestBody Manager manager) {
+		managerService.addManager(manager);
+	}
+	
+	@GetMapping("managers")
+	public List<Manager> viewManagers() {
+		return managerService.getAllManagers();
+	}
+	
+	
+//	@GetMapping("rooms")
+//	public List<Room> viewRooms(){
+//		return null;
+//	}
+	
+	 @GetMapping("room")
+	 public List<Room> viewRooms() {
+	    @SuppressWarnings("unchecked")
+		List<Room> room = restTemplate.getForObject("http://localhost:8082/api/rooms/", List.class);
+	    return room;
+	 }
+
+	@GetMapping("reservations")
+	public List<Reservation> viewReservations(){
+		return null;
+	}
+	
+	@GetMapping("guests")
+	public List<Guest> viewGuests(){
+		//Rest Template Here
+		return null;
+	}
+	
+	@GetMapping("inventory")
+	public List<Inventory> viewInventory(){
+		@SuppressWarnings("unchecked")
+		List<Inventory> inventory = restTemplate.getForObject("http://localhost:8082/api/inventory/", List.class);
+	    return inventory;
+	}
+	
+	
+}

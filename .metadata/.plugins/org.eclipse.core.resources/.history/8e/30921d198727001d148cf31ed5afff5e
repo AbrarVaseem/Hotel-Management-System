@@ -1,0 +1,14 @@
+package com.hms.inventorymanagement;
+
+import org.junit.jupiter.api.Test;
+
+@SpringBootTest
+public class InventoryControllerTest {
+
+	@Test
+	void getData() {
+		
+	}
+	
+	
+}
