@@ -51,7 +51,6 @@ class InventoryManagementApplicationTests {
 	@Test
 	public void addInventoryTest() {
 		Inventory inventory = new Inventory("4", "Med Kit", 8);
-		Inventory fake_inv = new Inventory("8", "Lot", 45);
 
 		when(inventoryRepository.save(inventory)).thenReturn(inventory);
 		// doReturn(inv).when(inventoryRepository).save(any());

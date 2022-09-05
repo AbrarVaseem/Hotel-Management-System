@@ -62,6 +62,8 @@
 	</section>
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\Hp\hotel-management-system\discovery-server"/>
+			<item value="C:\Users\Hp\hotel-management-system\api-gateway"/>
 			<item value="C:\Users\Hp\eclipse-workspace\discovery-server"/>
 			<item value="C:\Users\Hp\eclipse-workspace\api-gateway"/>
 			<item value="C:\Users\Hp\hotel-management-system\inventory-management"/>

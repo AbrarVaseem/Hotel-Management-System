@@ -12,10 +12,24 @@ public class User {
     private String password;
     private String role;
 
-    @Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+    
+    
+    public User() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
+    
+    
+	public User(String id, String username, String password, String role) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+	}
+
+
+
 
 	public String getId() {
 		return id;
@@ -49,6 +63,11 @@ public class User {
 		this.role = role;
 	}
 
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+	}
     
     
 }

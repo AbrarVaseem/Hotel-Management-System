@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import com.hms.usersystem.models.Guest;
 import com.hms.usersystem.models.Inventory;
 import com.hms.usersystem.models.Manager;
 import com.hms.usersystem.models.Receptionist;
+import com.hms.usersystem.models.Reservation;
 import com.hms.usersystem.models.Room;
 import com.hms.usersystem.services.UserService;
 
@@ -28,18 +30,14 @@ public class UserController {
 
 	@Autowired
 	private RestTemplate restTemplate;
-
-	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String manager() {
-		return "manager accepted";
-	}
-	
 	
 	// Manager CRUD for Owner
 	@RequestMapping(method = RequestMethod.POST, value = "/add-manager")
 	public void addManager(@RequestBody Manager manager) {
 		userService.addManager(manager);
 	}
+	
+//	@PreAuthorize("hasAuthority('manager')")
 	@RequestMapping(method = RequestMethod.GET, value = "/view-managers")
 	public List<Manager> getManagers() {
 		return userService.getManagers();
@@ -133,8 +131,23 @@ public class UserController {
 	}
 	@RequestMapping(method = RequestMethod.DELETE, value = "/delete-room/{id}")
 	public void deleteRoom(@PathVariable String id) {
-		restTemplate.put("http://room-management/api/rooms/delete-room/"+id, Room.class);
+		restTemplate.delete("http://room-management/api/rooms/delete-room/"+id, Room.class);
 	}
+	
+	//Make Reservation
+	@RequestMapping(method = RequestMethod.POST, value = "/make-reservation")
+	public Reservation makeReservation(@RequestBody Reservation reservation) {
+		return restTemplate.postForObject("http://room-management/api/rooms/make-reservation", reservation, Reservation.class);
+	}
+	
+	//View Reservations
+	@GetMapping("view-reservations")
+	public List<Reservation> getReservations() {
+		@SuppressWarnings("unchecked")
+		List<Reservation> reservations = restTemplate.getForObject("http://room-management/api/rooms/view-reservations/", List.class);
+		return reservations;
+	}
+	
 	
 	
 	

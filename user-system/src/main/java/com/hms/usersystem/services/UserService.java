@@ -39,11 +39,11 @@ public class UserService {
 			Manager userEntity = findById.get();
 			if (manager.getId() != null)
 				userEntity.setAddress(manager.getAddress());
-			userEntity.setAge(manager.getAge());
-			userEntity.setEmail(manager.getEmail());
-			userEntity.setName(manager.getName());
-			userEntity.setRole(manager.getRole());
-			userEntity.setSalary(manager.getSalary());
+				userEntity.setAge(manager.getAge());
+				userEntity.setEmail(manager.getEmail());
+				userEntity.setName(manager.getName());
+				userEntity.setRole(manager.getRole());
+				userEntity.setSalary(manager.getSalary());
 			return managerRepository.save(userEntity);
 		}
 		return null;
@@ -72,15 +72,19 @@ public class UserService {
 		if (findById.isPresent()) {
 			Receptionist userEntity = findById.get();
 			if(receptionist.getId() != null)
-//				userEntity.setAddress(receptionist.getAddress());
-//				userEntity.setAge(receptionist.getAge());
-//				userEntity.setEmail(receptionist.getEmail());
-//				userEntity.setName(receptionist.getName());
-//				userEntity.setRole(receptionist.getRole());
-//				userEntity.setSalary(receptionist.getSalary());
+				userEntity.setAddress(receptionist.getAddress());
+				userEntity.setAge(receptionist.getAge());
+				userEntity.setEmail(receptionist.getEmail());
+				userEntity.setEmployeeCode(receptionist.getEmployeeCode());
+				userEntity.setGender(receptionist.getGender());
+				userEntity.setName(receptionist.getName());
+				userEntity.setPhone(receptionist.getPhone());
+				userEntity.setRole(receptionist.getRole());
+				userEntity.setSalary(receptionist.getSalary());
+				
 				return receptionistRepository.save(userEntity);
 		}
-		return null;
+		return receptionist;
 	}
 	public void deleteReceptionist(String id) {
 		receptionistRepository.deleteById(id);
@@ -101,7 +105,21 @@ public class UserService {
 	public Optional<Guest> getGuestById(String id) {
 		return guestRepository.findById(id);
 	}
-	public void updateGuest(String id, Guest guest) {
+	public Guest updateGuest(String id, Guest guest) {
+	
+		Optional<Guest> findById = guestRepository.findById(id);
+		if (findById.isPresent()) {
+			Guest userEntity = findById.get();
+			if(guest.getId() != null)
+				userEntity.setAddress(guest.getAddress());
+				userEntity.setEmail(guest.getEmail());
+				userEntity.setGender(guest.getGender());
+				userEntity.setName(guest.getName());
+				userEntity.setPhone(guest.getPhone());
+				
+				return guestRepository.save(userEntity);
+		}
+		return guest;
 		
 	}
 	public void deleteGuest(String id) {
