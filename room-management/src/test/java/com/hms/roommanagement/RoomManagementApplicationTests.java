@@ -18,7 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.hms.roommanagement.models.Reservation;
 import com.hms.roommanagement.models.Room;
+import com.hms.roommanagement.repositories.ReservationRepository;
 import com.hms.roommanagement.repositories.RoomRepository;
 import com.hms.roommanagement.services.RoomServiceImplementation;
 
@@ -28,9 +30,13 @@ class RoomManagementApplicationTests {
 
 	@MockBean
 	RoomRepository roomRepository;
+	
+	@MockBean
+	ReservationRepository reservationRepository;
 
 	@Autowired
 	RoomServiceImplementation roomService;
+
 
 	@Test
 	public void addRoomTest() {
@@ -43,6 +49,18 @@ class RoomManagementApplicationTests {
 		Assertions.assertThat(rm).isNotNull();
 		Assert.assertEquals(room, rm);
 	}
+	
+//	@Test
+//	public void makeReservationsTest() {
+//		Reservation res = new Reservation("1", "l", "g", "mk", "g", "h", "h", "h", "h", "h", "h");
+//		Reservation fake_room = new Reservation("1", "l", "g", "mk", "g", "h", "h", "h", "h", "h", "h");
+//
+//		when(reservationRepository.save(res)).thenReturn(res);
+//		Reservation rm = roomService.makeReservation(res);
+//
+//		Assertions.assertThat(rm).isNotNull();
+//		Assert.assertEquals(res, rm);
+//	}
 
 	@Test
 	public void deleteRoomTest() {

@@ -1,5 +1,0 @@
-package com.hms.roommanagement.services;
-
-public interface RoomService {
-
-}

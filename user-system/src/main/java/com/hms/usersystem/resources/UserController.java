@@ -4,9 +4,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.client.loadbalancer.CompletionContext.Status;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,11 +31,24 @@ import com.hms.usersystem.models.Manager;
 import com.hms.usersystem.models.Receptionist;
 import com.hms.usersystem.models.Reservation;
 import com.hms.usersystem.models.Room;
+import com.hms.usersystem.models.User;
+import com.hms.usersystem.repositories.UserRepository;
 import com.hms.usersystem.services.UserService;
 
+
+
+
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders="POST")
 @RestController
 @RequestMapping("api/users/")
 public class UserController {
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	private UserService userService;
@@ -38,8 +63,9 @@ public class UserController {
 	}
 	
 //	@PreAuthorize("hasAuthority('manager')")
+//	@CrossOrigin(origins = "*", allowedHeaders="*")
 	@RequestMapping(method = RequestMethod.GET, value = "/view-managers")
-	public List<Manager> getManagers() {
+	public List<User> getManagers() {
 		return userService.getManagers();
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/view-manager/{id}")
@@ -66,7 +92,7 @@ public class UserController {
 		userService.addReceptionist(receptionist);
 	}
 	@GetMapping("/view-receptionist")
-	public List<Receptionist> getReceptionists() {
+	public List<User> getReceptionists() {
 		return userService.getReceptionists();
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/view-receptionist/{id}")
@@ -176,6 +202,29 @@ public class UserController {
 	
 	
 	
+//	@PostMapping("/signin")
+//    public ResponseEntity<String> authenticateUser(@RequestBody User loginDto){
+//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//                loginDto.getUsername(), loginDto.getPassword()));
+//
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+//    }
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+//	@CrossOrigin(origins = "http://localhost:3000", allowedHeaders="POST")
+	public Authentication login(@RequestBody User userRequest) {
+	    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
+	    boolean isAuthenticated = isAuthenticated(authentication);
+	    if (isAuthenticated) {
+	        SecurityContextHolder.getContext().setAuthentication(authentication);
+	    }
+	    return authentication;
+	}
+
+	private boolean isAuthenticated(Authentication authentication) {
+	    return authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+	}
 	
 
 	

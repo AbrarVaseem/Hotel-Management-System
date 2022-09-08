@@ -53,7 +53,6 @@ class InventoryManagementApplicationTests {
 		Inventory inventory = new Inventory("4", "Med Kit", 8);
 
 		when(inventoryRepository.save(inventory)).thenReturn(inventory);
-		// doReturn(inv).when(inventoryRepository).save(any());
 		Inventory iii = inventoryService.addInventory(inventory);
 
 		Assertions.assertThat(iii).isNotNull();
@@ -72,6 +71,13 @@ class InventoryManagementApplicationTests {
 		when(inventoryRepository.findAll())
 				.thenReturn(Stream.of(new Inventory("41", "Soap", 5)).collect(Collectors.toList()));
 		assertEquals(1, inventoryService.getInventory().size());
+	}
+	
+	@Test
+	public void getInventoryByIdTest() {
+		Inventory invv = new Inventory("4", "Med Kit", 8);
+		inventoryService.getInventoryItemById("4");
+		verify(inventoryRepository, times(1)).findById(invv.getId());
 	}
 
 	@Test

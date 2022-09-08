@@ -3,7 +3,7 @@ package com.hms.usersystem.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="receptionist")
+@Document(collection="users")
 
 public class Receptionist {
 	

@@ -6,12 +6,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.hms.usersystem.models.Guest;
 import com.hms.usersystem.models.Manager;
 import com.hms.usersystem.models.Receptionist;
+import com.hms.usersystem.models.User;
 import com.hms.usersystem.repositories.GuestRepository;
 import com.hms.usersystem.repositories.ManagerRepository;
 import com.hms.usersystem.repositories.ReceptionistRepository;
+import com.hms.usersystem.repositories.UserRepository;
 
 @Service
 public class UserService {
@@ -21,6 +24,9 @@ public class UserService {
 
 	@Autowired
 	private ReceptionistRepository receptionistRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	private GuestRepository guestRepository;
@@ -29,8 +35,9 @@ public class UserService {
 	public void addManager(Manager manager) {
 		managerRepository.save(manager);
 	}
-	public List<Manager> getManagers() {
-		List<Manager> allManagers = managerRepository.findAll();
+	public List<User> getManagers() {
+		List<User> allManagers = userRepository.getAllManagers();
+//		List<Manager> allManagers = managerRepository.findAll();
 		return allManagers;
 	}
 	public Manager updateManager(String id, Manager manager) {
@@ -60,8 +67,9 @@ public class UserService {
 	public void addReceptionist(Receptionist receptionist) {
 		receptionistRepository.save(receptionist);
 	}
-	public List<Receptionist> getReceptionists() {
-		List<Receptionist> allReceptionist = receptionistRepository.findAll();
+	public List<User> getReceptionists() {
+		List<User> allReceptionist = userRepository.getAllReceptionist();
+//		List<Receptionist> allReceptionist = receptionistRepository.findAll();
 		return allReceptionist;
 	}
 	public Optional<Receptionist> getReceptionistById(String id) {
