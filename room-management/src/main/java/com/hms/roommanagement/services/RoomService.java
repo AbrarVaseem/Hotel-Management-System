@@ -19,11 +19,15 @@ public interface RoomService {
 	public void deleteRoom(String id);
 
 	//Make Reservation for Guests
-	public void makeReservation(Reservation reservation);
+	public Reservation makeReservation(Reservation reservation);
 
 	public List<Room> getAvailableRooms();
 
 	public List<Reservation> getAllReservations();
+
+	public void deleteReservation(String id);
+
+	public Reservation updateReservation(String id, Reservation reservation);
 	
 //	Optional<Room> getRoomCode(String roomCode);
 	

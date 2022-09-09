@@ -49,14 +49,26 @@ public class RoomController {
 	
 	// Make Reservation for Guests
 	@RequestMapping(method=RequestMethod.POST, value="/make-reservation")
-	public void makeReservation(@RequestBody Reservation reservation) {
-		roomService.makeReservation(reservation);
+	public Reservation makeReservation(@RequestBody Reservation reservation) {
+		return roomService.makeReservation(reservation);
 	}
 	
 	// View All Reservations
 	@RequestMapping(method=RequestMethod.GET, value="/view-reservations")
 	public List<Reservation> viewReservations(){
 		return roomService.getAllReservations();
+	}
+	
+	// Update Reservation 
+	@RequestMapping(method=RequestMethod.PUT, value="/update-reservation/{id}")
+	public Reservation updateReservation(@RequestBody Reservation reservation, @PathVariable String id) {
+		return roomService.updateReservation(id, reservation);
+	}
+	
+	// Delete Reservation
+	@RequestMapping(method=RequestMethod.DELETE, value="/delete-reservation/{id}")
+	public void deleteReservation( @PathVariable String id ){
+		roomService.deleteReservation(id);
 	}
 	
 	// Search Room

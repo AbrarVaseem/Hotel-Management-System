@@ -36,8 +36,6 @@ import com.hms.usersystem.repositories.UserRepository;
 import com.hms.usersystem.services.UserService;
 
 
-
-
 @CrossOrigin(origins = "http://localhost:3000", allowedHeaders="POST")
 @RestController
 @RequestMapping("api/users/")
@@ -201,15 +199,6 @@ public class UserController {
 	}
 	
 	
-	
-//	@PostMapping("/signin")
-//    public ResponseEntity<String> authenticateUser(@RequestBody User loginDto){
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                loginDto.getUsername(), loginDto.getPassword()));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
-//    }
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 //	@CrossOrigin(origins = "http://localhost:3000", allowedHeaders="POST")

@@ -57,7 +57,7 @@ public class RoomServiceImplementation implements RoomService {
 	}
 
 	// Make Reservation for Guests
-	public void makeReservation(Reservation reservation) {
+	public Reservation makeReservation(Reservation reservation) {
 
 		List<Room> roomCode = roomRepository.findByCode(reservation.getRoomId());
 
@@ -72,6 +72,7 @@ public class RoomServiceImplementation implements RoomService {
 		} else {
 			System.out.println("failed to make reservation since the room is unavailable");
 		}
+		return reservation;
 
 	}
 
@@ -81,6 +82,40 @@ public class RoomServiceImplementation implements RoomService {
 
 	public List<Reservation> getAllReservations() {
 		return reservationRepository.findAll();
+	}
+
+	public void deleteReservation(String id) {
+		reservationRepository.deleteById(id);
+	}
+
+	public Reservation updateReservation(String id, Reservation reservation) {
+		
+
+		Optional<Reservation> findById = reservationRepository.findById(id);
+		Optional<Room> findByRoomId = roomRepository.findById(reservation.getRoomId());
+		if (findById.isPresent()) {
+			Reservation userEntity = findById.get();
+			Room roomEntity = findByRoomId.get();
+			if (reservation.getId() != null)
+				userEntity.setAdultsCount(reservation.getAdultsCount());
+				userEntity.setCheckIn(reservation.getCheckIn());
+				userEntity.setCheckOut(reservation.getCheckOut());
+				userEntity.setChildrenCount(reservation.getChildrenCount());
+				userEntity.setCost(reservation.getCost());
+				userEntity.setGuestId(reservation.getGuestId());
+				userEntity.setNightCounts(reservation.getNightCounts());
+				userEntity.setRoomCountReq(reservation.getRoomCountReq());
+				userEntity.setRoomId(reservation.getRoomId());
+				userEntity.setStatus(reservation.getStatus());
+				findByRoomId.stream().forEach(e->e.setCode(e.getCode()));
+				roomEntity.setCode("unavailable");
+				roomRepository.save(roomEntity);
+			return reservationRepository.save(userEntity);
+		}
+		return reservation;
+
+		
+
 	}
 
 }

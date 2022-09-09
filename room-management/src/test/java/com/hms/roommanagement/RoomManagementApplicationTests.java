@@ -50,17 +50,6 @@ class RoomManagementApplicationTests {
 		Assert.assertEquals(room, rm);
 	}
 	
-//	@Test
-//	public void makeReservationsTest() {
-//		Reservation res = new Reservation("1", "l", "g", "mk", "g", "h", "h", "h", "h", "h", "h");
-//		Reservation fake_room = new Reservation("1", "l", "g", "mk", "g", "h", "h", "h", "h", "h", "h");
-//
-//		when(reservationRepository.save(res)).thenReturn(res);
-//		Reservation rm = roomService.makeReservation(res);
-//
-//		Assertions.assertThat(rm).isNotNull();
-//		Assert.assertEquals(res, rm);
-//	}
 
 	@Test
 	public void deleteRoomTest() {
@@ -90,6 +79,25 @@ class RoomManagementApplicationTests {
 
 		Assertions.assertThat(in).isNotNull();
 		Assertions.assertThat(updatedIn.getRoomInfo()).isEqualTo("3 Bed room with AC");
+	}
+	
+	
+	@Test
+	public void makeReservationsTest() {
+		Reservation res = new Reservation("1", "l", "g", "mk", "g", "h", "h", "h", "h", "h", "h");
+
+		when(reservationRepository.save(res)).thenReturn(res);
+		Reservation rm = roomService.makeReservation(res);
+
+		Assertions.assertThat(rm).isNotNull();
+		Assert.assertEquals(res, rm);
+	}
+	
+	@Test
+	public void deleteReservationTest() {
+		Reservation res = new Reservation("1", "l", "g", "mk", "g", "h", "h", "h", "h", "h", "h");
+		roomService.deleteReservation("1");
+		verify(reservationRepository, times(1)).deleteById(res.getId());
 	}
 
 }
