@@ -1,8 +1,0 @@
-package com.hms.usersystem;
-
-@Repository
-public class UserRepository extends MongoRepository<User, Long>{
-
-    User findByUsername(String username);
-
-}

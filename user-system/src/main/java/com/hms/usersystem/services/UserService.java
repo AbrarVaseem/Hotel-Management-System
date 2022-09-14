@@ -48,7 +48,7 @@ public class UserService {
 				userEntity.setAddress(manager.getAddress());
 				userEntity.setAge(manager.getAge());
 				userEntity.setEmail(manager.getEmail());
-				userEntity.setName(manager.getName());
+				userEntity.setUsername(manager.getUsername());
 				userEntity.setRole(manager.getRole());
 				userEntity.setSalary(manager.getSalary());
 			return managerRepository.save(userEntity);

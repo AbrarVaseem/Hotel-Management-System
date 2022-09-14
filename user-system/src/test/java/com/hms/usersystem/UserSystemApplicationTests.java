@@ -73,13 +73,13 @@ class UserSystemApplicationTests {
 		when(managerRepository.save(in)).thenReturn(in);
 		Assertions.assertThat(in).isNotNull();
 
-		in.setName("a");
+		in.setUsername("a");
 		Manager updatedIn = userService.updateManager("2", in);
 
 		when(managerRepository.save(updatedIn)).thenReturn(in);
 
 		Assertions.assertThat(in).isNotNull();
-		Assertions.assertThat(updatedIn.getName()).isEqualTo("a");
+		Assertions.assertThat(updatedIn.getUsername()).isEqualTo("a");
 	}
 
 }

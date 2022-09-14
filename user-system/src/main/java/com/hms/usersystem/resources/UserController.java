@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,28 +26,43 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.hms.usersystem.models.AuthenticationRequest;
+import com.hms.usersystem.models.AuthenticationResponse;
 import com.hms.usersystem.models.Guest;
 import com.hms.usersystem.models.Inventory;
+
 import com.hms.usersystem.models.Manager;
 import com.hms.usersystem.models.Receptionist;
 import com.hms.usersystem.models.Reservation;
 import com.hms.usersystem.models.Room;
 import com.hms.usersystem.models.User;
 import com.hms.usersystem.repositories.UserRepository;
+import com.hms.usersystem.services.MyUserDetailsService;
 import com.hms.usersystem.services.UserService;
+import com.hms.usersystem.util.JwtUtil;
 
+import org.springframework.security.core.userdetails.UserDetails;
 
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders="POST")
 @RestController
 @RequestMapping("api/users/")
 public class UserController {
+
+	
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
+	@Autowired
+	private JwtUtil jwtTokenUtil;
 	
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private MyUserDetailsService userDetailsService;
+	
+	
+	
 
 	@Autowired
 	private UserService userService;
@@ -60,8 +76,6 @@ public class UserController {
 		userService.addManager(manager);
 	}
 	
-//	@PreAuthorize("hasAuthority('manager')")
-//	@CrossOrigin(origins = "*", allowedHeaders="*")
 	@RequestMapping(method = RequestMethod.GET, value = "/view-managers")
 	public List<User> getManagers() {
 		return userService.getManagers();
@@ -201,7 +215,6 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-//	@CrossOrigin(origins = "http://localhost:3000", allowedHeaders="POST")
 	public Authentication login(@RequestBody User userRequest) {
 	    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
 	    boolean isAuthenticated = isAuthenticated(authentication);
@@ -214,6 +227,70 @@ public class UserController {
 	private boolean isAuthenticated(Authentication authentication) {
 	    return authentication != null && !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
 	}
+	
+	
+	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+		try {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+			);
+		}
+		catch (BadCredentialsException e) {
+			throw new Exception("Incorrect username or password", e);
+		}
+		final UserDetails userDetails = userDetailsService
+				.loadUserByUsername(authenticationRequest.getUsername());
+
+		final String jwt = jwtTokenUtil.generateToken(userDetails);
+		
+		User us = userRepository.findByUsername(authenticationRequest.getUsername());
+
+		return ResponseEntity.ok(new AuthenticationResponse(jwt, us));		
+		
+	}
+	
+	
+	
+
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 	

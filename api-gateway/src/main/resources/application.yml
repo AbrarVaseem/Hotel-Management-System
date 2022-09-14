@@ -15,7 +15,14 @@ spring:
         - id: user-system
           uri: lb://user-system
           predicates:
-            - Path=/api/users/**   
+            - Path=/api/users/**
+      globalcors:
+       corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000/"
+            allowedMethods: "*"
+            allowedHeaders: "*"     
+            allow-credentials: true      
 
 server:
   port: 8989
