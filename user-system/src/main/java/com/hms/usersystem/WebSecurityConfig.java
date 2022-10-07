@@ -44,10 +44,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		httpSecurity.csrf().disable()
 				.authorizeRequests()
+				.antMatchers("/swagger-ui/index.html").permitAll()
 				.antMatchers("/api/users/authenticate").permitAll()
-//				.antMatchers("/api/users/login").permitAll()
-//				.antMatchers("/api/users/view-managers").hasAuthority("owner")
-//				.antMatchers("/api/users/**").permitAll()
 				.anyRequest().authenticated().and()
 				.exceptionHandling().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

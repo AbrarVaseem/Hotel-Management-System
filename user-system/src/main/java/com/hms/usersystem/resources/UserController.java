@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.CompletionContext.Status;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -43,6 +44,38 @@ import com.hms.usersystem.util.JwtUtil;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+
+
+
+
+
+
+
+
+
+import java.io.InputStream;
+import java.util.logging.Logger;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+
+
+
+
+
+
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+
 @RestController
 @RequestMapping("api/users/")
 public class UserController {
@@ -72,8 +105,9 @@ public class UserController {
 	
 	// Manager CRUD for Owner
 	@RequestMapping(method = RequestMethod.POST, value = "/add-manager")
-	public void addManager(@RequestBody Manager manager) {
+	public Manager addManager(@RequestBody Manager manager) {
 		userService.addManager(manager);
+		return manager;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/view-managers")
@@ -100,8 +134,9 @@ public class UserController {
 
 	// Receptionist CRUD for Owner and Manager
 	@RequestMapping(method = RequestMethod.POST, value = "/add-receptionist")
-	public void addReceptionist(@RequestBody Receptionist receptionist) {
+	public Receptionist addReceptionist(@RequestBody Receptionist receptionist) {
 		userService.addReceptionist(receptionist);
+		return receptionist;
 	}
 	@GetMapping("/view-receptionist")
 	public List<User> getReceptionists() {
@@ -163,6 +198,12 @@ public class UserController {
 		List<Room> room = restTemplate.getForObject("http://room-management/api/rooms/view-rooms/", List.class);
 		return room;
 	}
+	@RequestMapping(method=RequestMethod.GET, value="/view-room-details/{id}")
+	public Optional<Room> viewRooms(@PathVariable String id){
+		@SuppressWarnings("unchecked")
+		Optional<Room> roomById = restTemplate.getForObject("http://room-management/api/rooms/view-room-details/"+id, Optional.class);
+		return roomById;
+	}
 	@RequestMapping(method = RequestMethod.PUT, value = "/update-room/{id}")
 	public void updateRoom(@RequestBody Room room, @PathVariable String id) {
 		restTemplate.put("http://room-management/api/rooms/update-room/"+id, room , Room.class);
@@ -186,6 +227,14 @@ public class UserController {
 		return reservations;
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/view-reservation-details/{id}")
+	public Optional<Reservation> viewReservationsDetails(@PathVariable String id){
+//		return roomService.getReservationDetails(id);.
+		@SuppressWarnings("unchecked")
+		Optional<Reservation> reservationById = restTemplate.getForObject("http://room-management/api/rooms/view-reservation-details/"+id, Optional.class);
+		return reservationById;
+	}
+	
 	
 	
 	
@@ -195,12 +244,18 @@ public class UserController {
 	// Inventory CRUD for Owner and Manager
 	@RequestMapping(method = RequestMethod.POST, value = "/add-inventory")
 	public Inventory addInventory(@RequestBody Inventory inventory) {
-		return restTemplate.postForObject("http://inventory-management/api/add-inventory", inventory, Inventory.class);
+		return restTemplate.postForObject("http://inventory-management/api/inventory/add-inventory", inventory, Inventory.class);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/view-inventory-item/{id}")
+	public Optional<Inventory> viewInventory(@PathVariable String id) {
+		@SuppressWarnings("unchecked")
+		Optional<Inventory> inventoryById = restTemplate.getForObject("http://inventory-management/api/inventory/view-inventory-item/"+id, Optional.class);
+		return inventoryById;
 	}
 	@GetMapping("view-inventory")
 	public List<Inventory> getInventory() {
 		@SuppressWarnings("unchecked")
-		List<Inventory> inventory = restTemplate.getForObject("http://inventory-management/api/view-inventory", List.class);
+		List<Inventory> inventory = restTemplate.getForObject("http://inventory-management/api/inventory/view-inventory", List.class);
 		return inventory;
 	}
 	@RequestMapping(method = RequestMethod.PUT, value = "/update-inventory/{id}")
@@ -209,7 +264,7 @@ public class UserController {
 	}
 	@RequestMapping(method = RequestMethod.DELETE, value = "/delete-inventory/{id}")
 	public void deleteInventory(@PathVariable String id) {
-		restTemplate.put("http://inventory-management/api/inventory/delete-inventory/"+id, Inventory.class);
+		restTemplate.delete("http://inventory-management/api/inventory/delete-inventory/"+id, Inventory.class);
 	}
 	
 	
@@ -249,22 +304,65 @@ public class UserController {
 		return ResponseEntity.ok(new AuthenticationResponse(jwt, us));		
 		
 	}
-	
-	
-	
 
 	
+//	private static final Logger logger = Logger.getLogger(UserController.class.getName());
+//
+//	@PostMapping("/upload")
+//	public ResponseEntity<String> uploadData(@RequestParam("file") MultipartFile file) throws Exception {
+//
+//		if (file == null) {
+//			throw new RuntimeException("You must select the a file for uploading");
+//		}
+//
+//		InputStream inputStream = file.getInputStream();
+//		String originalName = file.getOriginalFilename();
+//		String name = file.getName();
+//		String contentType = file.getContentType();
+//		long size = file.getSize();
+//
+//		logger.info("inputStream: " + inputStream);
+//		logger.info("originalName: " + originalName);
+//		logger.info("name: " + name);
+//		logger.info("contentType: " + contentType);
+//		logger.info("size: " + size);
+//
+//
+//		return new ResponseEntity<String>(originalName, HttpStatus.OK);
+//	}
 	
-
+	
+//	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+//	private static final Logger logger = Logger.getLogger(UserController.class.getName());
+//
+//    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity uploadFile(@RequestParam MultipartFile file) {
+//        logger.info(String.format("File name '%s' uploaded successfully.", file.getOriginalFilename()));
+//        return ResponseEntity.ok().build();
+//    }
 	
 	
 	
 	
-	
-	
-	
-	
-	
+//	@RequestMapping(value = "/upload",
+//			method = RequestMethod.POST,
+//			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//
+//	public String fileUpload(@RequestParam("file") MultipartFile file) throws IOException
+//	{
+//		File convertFile = new File("C://Users//Hp//hotel-management-system-ui//hotel-management-system-ui//src//static//images//room-images/" + file.getOriginalFilename());
+//		convertFile.createNewFile();
+//
+//		try (FileOutputStream fout = new FileOutputStream(convertFile))
+//		{
+//			fout.write(file.getBytes());
+//		}
+//		catch (Exception exe)
+//		{
+//			exe.printStackTrace();
+//		}
+//		return "File has uploaded successfully";
+//	}
 	
 	
 	

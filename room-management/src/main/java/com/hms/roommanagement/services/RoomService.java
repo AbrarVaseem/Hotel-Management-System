@@ -3,8 +3,11 @@ package com.hms.roommanagement.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.hms.roommanagement.models.Reservation;
 import com.hms.roommanagement.models.Room;
+
 
 public interface RoomService {
 
@@ -28,6 +31,8 @@ public interface RoomService {
 	public void deleteReservation(String id);
 
 	public Reservation updateReservation(String id, Reservation reservation);
+
+	public Optional<Reservation> getReservationDetails(String id);
 	
 //	Optional<Room> getRoomCode(String roomCode);
 	

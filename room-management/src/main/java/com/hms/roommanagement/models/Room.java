@@ -1,30 +1,32 @@
 package com.hms.roommanagement.models;
 
+import java.io.File;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="rooms")
-
 public class Room {
-	
 	@Id
 	private String id;
 	private String code;
 	private String roomInfo;
 	private long roomPrice;
 	private String status;
+	private String file;
 	
 	public Room() {
 		super();
 	}
 
-	public Room(String id, String code, String roomInfo, long roomPrice, String status) {
+	public Room(String id, String code, String roomInfo, long roomPrice, String status, String file) {
 		super();
 		this.id = id;
 		this.code = code;
 		this.roomInfo = roomInfo;
 		this.roomPrice = roomPrice;
 		this.status = status;
+		this.file = file;
 	}
 
 	public String getId() {
@@ -66,6 +68,18 @@ public class Room {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getFile() {
+		return file;
+	}
+
+	public void setFile(String file) {
+		this.file = file;
+	}
+
+	
+	
+	
 
 	
 }

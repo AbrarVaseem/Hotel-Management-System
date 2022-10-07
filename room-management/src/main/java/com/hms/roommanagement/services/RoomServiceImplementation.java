@@ -26,6 +26,10 @@ public class RoomServiceImplementation implements RoomService {
 	}
 
 	public List<Room> getRooms() {
+//		List<Room> rm = roomRepository.findAll();
+//		rm.forEach(e->e.getCode());
+//		List<Reservation> res = reservationRepository.findAll();
+//		res.forEach(e->e.getRoomId());
 		return roomRepository.findAll();
 	}
 
@@ -57,7 +61,7 @@ public class RoomServiceImplementation implements RoomService {
 	}
 
 	// Make Reservation for Guests
-	public Reservation makeReservation(Reservation reservation) {
+	public Reservation makeReservation(Reservation reservation){
 
 		List<Room> roomCode = roomRepository.findByCode(reservation.getRoomId());
 
@@ -71,6 +75,7 @@ public class RoomServiceImplementation implements RoomService {
 			}
 		} else {
 			System.out.println("failed to make reservation since the room is unavailable");
+			return null;
 		}
 		return reservation;
 
@@ -86,16 +91,29 @@ public class RoomServiceImplementation implements RoomService {
 
 	public void deleteReservation(String id) {
 		reservationRepository.deleteById(id);
+		
+		Reservation reservation = reservationRepository.findById(id).get();
+		List<Room> roomCode = roomRepository.findByCode(reservation.getRoomId());
+
+		String checkIfAvailable = roomCode.iterator().next().getStatus();
+		reservationRepository.deleteById(id);
+		if (checkIfAvailable.equalsIgnoreCase("unavailable")) { 
+			roomCode.forEach(e->e.setStatus("available"));	
+	        roomRepository.saveAll(roomCode);
+		}
+		
+		
 	}
 
 	public Reservation updateReservation(String id, Reservation reservation) {
 		
 
-		Optional<Reservation> findById = reservationRepository.findById(id);
-		Optional<Room> findByRoomId = roomRepository.findById(reservation.getRoomId());
-		if (findById.isPresent()) {
-			Reservation userEntity = findById.get();
-			Room roomEntity = findByRoomId.get();
+	    Reservation findById = reservationRepository.findById(id).get();
+		List<Room> findByRoomId = roomRepository.findByCode(reservation.getRoomId());
+		if (findById.getId() != null) {
+			Reservation userEntity = findById;
+			List<Room> roomEntity = findByRoomId;
+			
 			if (reservation.getId() != null)
 				userEntity.setAdultsCount(reservation.getAdultsCount());
 				userEntity.setCheckIn(reservation.getCheckIn());
@@ -108,8 +126,8 @@ public class RoomServiceImplementation implements RoomService {
 				userEntity.setRoomId(reservation.getRoomId());
 				userEntity.setStatus(reservation.getStatus());
 				findByRoomId.stream().forEach(e->e.setCode(e.getCode()));
-				roomEntity.setCode("unavailable");
-				roomRepository.save(roomEntity);
+				roomEntity.forEach(e->e.setStatus("unavailable"));
+				roomRepository.saveAll(roomEntity);
 			return reservationRepository.save(userEntity);
 		}
 		return reservation;
@@ -118,4 +136,13 @@ public class RoomServiceImplementation implements RoomService {
 
 	}
 
+	@Override
+	public Optional<Reservation> getReservationDetails(String id) {
+		return reservationRepository.findById(id) ;
+	}
+
+//	public Optional<Room> getRoomDetailsById(String id) {
+//		return roomRepository.findById(id);
+//	}
+	
 }

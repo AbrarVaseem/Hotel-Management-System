@@ -32,8 +32,9 @@ public class UserService {
 	private GuestRepository guestRepository;
 
 	// Manager CRUD for Owner
-	public void addManager(Manager manager) {
+	public Manager addManager(Manager manager) {
 		managerRepository.save(manager);
+		return manager;
 	}
 	public List<User> getManagers() {
 		List<User> allManagers = userRepository.getAllManagers();
@@ -64,8 +65,9 @@ public class UserService {
 	
 	
 	// Receptionist CRUD for Owner and Manager
-	public void addReceptionist(Receptionist receptionist) {
+	public Receptionist addReceptionist(Receptionist receptionist) {
 		receptionistRepository.save(receptionist);
+		return receptionist;
 	}
 	public List<User> getReceptionists() {
 		List<User> allReceptionist = userRepository.getAllReceptionist();
@@ -83,9 +85,9 @@ public class UserService {
 				userEntity.setAddress(receptionist.getAddress());
 				userEntity.setAge(receptionist.getAge());
 				userEntity.setEmail(receptionist.getEmail());
-				userEntity.setEmployeeCode(receptionist.getEmployeeCode());
-				userEntity.setGender(receptionist.getGender());
-				userEntity.setName(receptionist.getName());
+//				userEntity.setEmployeeCode(receptionist.getEmployeeCode());
+//				userEntity.setGender(receptionist.getGender());
+				userEntity.setUsername(receptionist.getUsername());
 				userEntity.setPhone(receptionist.getPhone());
 				userEntity.setRole(receptionist.getRole());
 				userEntity.setSalary(receptionist.getSalary());
@@ -131,7 +133,7 @@ public class UserService {
 		
 	}
 	public void deleteGuest(String id) {
-		receptionistRepository.deleteById(id);
+		guestRepository.deleteById(id);
 	}
 	
 	
